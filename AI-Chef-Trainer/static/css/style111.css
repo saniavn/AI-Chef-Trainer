@@ -1,0 +1,359 @@
+body {
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+  /*  background-color: #FFF9C4; Light yellow */
+    /* padding: 20px; Removed to allow full width */
+}
+
+#spline-viewer-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Send the viewer behind other content */
+}
+/* Center Align Headers */
+h2, h4 {
+    text-align: center;
+    color: #444; /* Slightly lighter text for headings */
+    margin-top: 10px; /* Adds space on top */
+    margin-bottom: 10px; /* Adds space at the bottom */
+}
+
+.ai-description {
+    text-align: center;
+    color: #444;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding-left: 20px;
+    font-size: 28px
+}
+
+
+
+/* Ingredients Container */
+.ingredients-container {
+    flex: 3; /* Increase space allocation */
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 5px;
+    border: none; /*1px solid #000000; /* Add a black border */
+    box-shadow: none; /* Remove the shadow for a cleaner look */
+    border-radius: 10px;
+    max-height: 505px;
+    overflow: auto;
+
+}
+
+/* AI Suggestions Container */
+.ai-suggestions-container {
+    flex: 3; /* Adjust based on layout preference */
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 0;
+    border: none; /* 1px solid #000000; /* Black border for consistency */
+    margin-left: 20px; /* Space between this container and others */
+    margin-right: 20px; /* Ensures some space on the right side */
+    width: auto; /* Adjust width as needed */
+    max-width: 400px;
+    box-shadow: none; /* Remove box shadow for a flat appearance */
+    border-radius: 10px;
+    max-height: 450px;
+    overflow: auto;
+}
+
+@media (max-width: 768px) {
+    .flex-wrapper {
+        flex-direction: column;
+        align-items: center; /* Stack vertically on small screens */
+    }
+    .ingredients-container, .ai-suggestions-container {
+        width: 100%; /* Full width for better readability */
+        margin-bottom: 20px; /* Spacing between stacked containers */
+    }
+    .model-buttons {
+        margin-top: 20px;
+    }
+    .button-row h4 {
+        margin-bottom: 15px;
+    }
+
+}
+.button-container {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    align-items: flex-start; /* Keeps text aligned to the start */
+    padding: 5px; /* Padding around the entire container */
+}
+
+
+.button-row h4 {
+    margin-bottom: 20px; /* Increase the space between the heading and buttons */
+    padding-left: 5px; /* Aligns text with the buttons */
+}
+.model-buttons  {
+    display: flex;
+    flex-direction: row;
+    padding-left: 5px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    gap: 10px;
+    width: 100%;
+    justify-content: center; /* Centers the button */
+}
+
+
+.button-row {
+    display: flex;
+    flex-direction: row; /* Ensures buttons are in a row */
+    padding-left: 5px; /* Aligns buttons with the heading */
+    margin-bottom: 20px;
+    margin-top: 10px; /* Adds more space above the buttons */
+    gap: 10px;
+    width: 100%;
+    justify-content: left;
+}
+
+
+.model-buttons button:first-child {
+    margin-left: 20px; /* Maintain consistent margin*/
+}
+
+.model-buttons button {
+    margin: 0 20px;
+}
+
+.extra-buttons {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 0;
+}
+
+.model-buttons button{
+    padding: 10px 15px; /* Reduced for smaller button size */
+    font-size: 22px;
+    margin-top: 30;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+.button-row button{
+    padding: 10px 15px;
+    font-size: 22px;
+    margin-top: 30;
+    background-color: #4CAF50; /* Example color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer; /* Pointer cursor on hover */
+}
+ .extra-buttons button {
+    padding: 10px 15px;
+    font-size: 22px;
+    margin-top: auto;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.model-buttons button:hover, .extra-buttons button:hover {
+    background-color: #45a049; /* Darker shade on hover */
+}
+
+.ingredient img, .dish img {
+    width: 65px; /* Increased image size */
+    height: auto; /* Maintain aspect ratio */
+    margin-right: 10px; /* Space between image and text/checkbox */
+}
+
+.ingredient, .dish {
+    display: flex;
+    align-items: center; /* Keep items aligned vertically */
+    gap: 10px;
+}
+
+
+
+.Ingredients input[type="checkbox"], .Dishes input[type="radio"] {
+    margin-right: 20px; /* Space between checkbox and image */
+    font-size: 17px
+}
+
+.Ingredients input[type="checkbox"], .Dishes input[type="radio"] {
+    margin-right: 10px; /* Space between checkbox and image */
+    font-size:1.5vw;
+}
+
+
+/* Container to align sections side by side */
+.container {
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap as needed */
+    justify-content: center; /* Centers items horizontally */
+    gap: 10px; /* Adjust based on your preference */
+    max-width: 95%;
+    margin: 0 auto;
+    padding-left: 0;
+}
+
+.row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.column {
+    flex: 1; /* Allows columns to grow and fill the space */
+    min-width: 300px; /* Increased minimum width to accommodate larger images */
+    padding: 5px; /* Padding around each item */
+
+}
+
+.ingredients-section, .dishes-section {
+    flex-basis: 45%; /* Adjusts this value to control the width of each section */
+    align-self: flex-start; /* Aligns sections to the top */
+    padding: 10px;
+    border: 1px solid #ddd; /* Adds border */
+    border-radius: 10px; /* Rounds the corners */
+    background-color: #f9f9f9; /* Light background */
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 30px 0; /* Add some space between rows */
+}
+
+.column, .dish {
+    flex: 1; /* Make columns grow to fill space */
+    min-width: 200px; /* Minimum width of each column or dish */
+    padding: 5px; /* Padding around each item */
+}
+
+.ingredient, .dish {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    gap: 10px; /* Space between checkbox and label */
+}
+
+/* Adjusting font size for labels next to checkboxes/radios */
+.ingredient label, .dish label {
+    font-size: 20px; /* Increased font size for better visibility */
+}
+
+
+/* Change background color of dropdown on hover */
+.custom-select:hover {
+    border-color: #aaa; /* Darker border on hover */
+}
+
+h2 {
+    font-size: 36px; /* Adjust this value to your preferred font size */
+}
+h4 {
+    font-size: 28px; /* Adjust this value to your preferred font size */
+}
+
+.new-data input[type="text"] {
+    width: 100%; /* Makes the input field take the full width of its parent container */
+
+
+    border: 1px solid #ccc; /* Optional: Adds a border to the input field */
+    border-radius: 4px; /* Optional: Rounds the corners of the input field */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: Adds a subtle shadow to the input field */
+    margin-bottom: 10px; /* Adds space below the input field */
+    padding: 1%;
+    font-size: 18px
+}
+.ai-suggestions-container h4, .ai-suggestions-container #ai-responses {
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+}
+
+
+.ingredients-container, .ai-suggestions-container {
+    background-color: rgba(255, 255, 255, 0.9); /* This will make the container semi-transparent */
+    /* ... other styles ... */
+}
+.new-data label {
+    font-size: 20px; /* Increase the font size as needed */
+    display: block; /* Ensures the label is on its own line if not already */
+
+}
+.extra-buttons button {
+    width: auto;
+    height: auto;
+    padding: 5px 10px;
+    border-radius: 0;  /* Square shape for a more standard button appearance */
+    background-color: #ff0000;
+    border: 1px solid #ff0000;  /* Border same as background */
+    color: white;  /* White text for contrast */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    line-height: 24px;  /* Adequate line height for text */
+    transition: all 0.3s ease;  /* Smooth transition for hover effects */
+}
+
+.extra-buttons button::after {
+    content: '→';
+    font-size: 22px;  
+
+}
+.extra-buttons {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 100;
+    width: auto;
+    clear: both;
+    margin: 0;
+    padding: 0;
+}
+
+.extra-buttons button:hover {
+    background-color: #e60000;  /* Slightly darker shade of red on hover */
+}
+.extra-buttons span {
+    margin-right: 5px;  /* Space between text and button */
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+}
+.extra-buttons button {
+    padding: 2px 2px;
+}
+
+
+}
+.next-button::after {
+    content: '→'; /* Adds an arrow */
+    margin-left: 5px; /* Space between text and arrow */
+    font-size: 32px; /* Adjust size as needed */
+}
+.next-button {
+    padding: 10px 15px; /* Adjust padding as needed */
+    font-size: 22px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.next-button:hover {
+    background-color: #45a049; /* Darker shade on hover */
+}

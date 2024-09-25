@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Background</title>
+    <style>
+    body{
+    background-image: url('{{ url_for('static', filename='images/page1.jpg') }}');
+    background-repeat: no-repeat; /* Do not repeat the image */
+      background-attachment: fixed; /* Fix the background relative to the viewport */
+      background-size: cover; /* Cover the entire viewport */
+      -webkit-background-size: cover; /* For older WebKit browsers */
+      -moz-background-size: cover; /* For older Firefox browsers */
+      -o-background-size: cover; /* For older Opera browsers */
+    }
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Ensure the animated content doesn't overflow */
+            position: relative;
+        }
+
+        #spline-viewer-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Send the viewer behind other content */
+        }
+
+        /* Additional styles for other elements */
+        #main-title {
+            text-align: center;
+            color: White;
+            padding-top: 80px;
+            z-index: 1; /* Ensure title appears above the animated background */
+            font-size: 80px;
+        }
+
+        #student-info {
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background for better readability */
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            z-index: 1; /* Ensure form appears above the animated background */
+            font-family: Arial, sans-serif; /* Change font family to Arial or any other preferred sans-serif font */
+            font-size: 24px; /* Adjust font size to make it larger */
+        }
+        #student-info input[type="text"],
+        #student-info select {
+        width: 20%;
+      /*  padding: 10px; /* Add padding for better visual appearance */
+        padding: 1%;
+        font-size:1.5vw;
+
+      }
+      #student-name::placeholder {
+          font-size: 20px; /* Adjust font size for placeholder text */
+      }
+      #student-age option {
+          font-size: 20px; /* Adjust font size for the select element */
+      }
+
+      /* Adjust font size for options within the select element */
+      #student-grade option {
+          font-size: 20px;
+      }
+      body {
+          font-family: 'Arial', sans-serif; /* Your preferred font */
+          color: #333; /* Dark gray text */
+          display: flex;
+          flex-direction: column;
+          align-items: center; /* Center children */
+          min-height: 100vh;
+          margin: 0;
+          padding: 20px;
+      }
+
+      /* Improved Button Appearance */
+      button {
+          padding: 15px 30px;
+          font-size: 20px;
+          margin-top: 20px; /* Add some space above the button */
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+      }
+      button:hover {
+          background-color: #45a049; /* Darker shade of green */
+      }
+      #supplement-link {
+                 position: absolute;
+                 top: 10px;
+                 right: 10px;
+                 font-size: 24px;
+                 background-color: #4CAF50; /* Green background */
+                 color: white; /* White text */
+                 padding: 10px 20px;
+                 border-radius: 10px;
+                 text-decoration: none; /* No underline */
+             }
+      #supplement-link:hover {
+            background-color: #45a049; /* Darker shade of green */
+        }
+
+
+    </style>
+    <!--<link rel="stylesheet" href="{{ url_for('static', filename='css/style1.css') }}">-->
+    <script src="{{ url_for('static', filename='js/scriptf.js') }}"></script>
+  <!--  <script type="module" src="https://unpkg.com/@splinetool/viewer@1.0.54/build/spline-viewer.js"></script>-->
+</head>
+<body>
+  <a id="supplement-link" href="/supplement">About</a>
+
+    <div id="spline-viewer-container">
+        <spline-viewer url="https://prod.spline.design/YjOcL6JD6h8sZNiK/scene.splinecode"></spline-viewer>
+    </div>
+    <h1 id="main-title">AI Chef Trainer</h1>
+    <div class="animated-words">
+        <span class="animated-text"></span>
+        <span class="animated-text" style="display:none;">Tool</span>
+    </div>
+    <section id="student-info">
+    <h2>Student Information</h2>
+    <form id="student-form" action="/submit_student_info" method="POST">
+      <label for="student-name">Name and Last name intial:</label>
+          <input type="text" id="student-name" name="student_name" placeholder="e.g., John S." required  autocomplete="off">
+            <!--<input type="text" id="Last-intial" name="Last-intial" placeholder="Enter your last-initial" required>-->
+
+            <label for="student-age">Age:</label>
+            <select id="student-age" name="student_age" required>
+    <option value="">Select your age</option>
+
+    <option value="10-12">10-12</option>
+    <option value="13-15">13-15</option>
+    <option value="16-18">16-18</option>
+                <!--  more age ranges -->
+            </select>
+            <label for="student-grade">Grade:</label>
+<select id="student-grade" name="student_grade" required>
+
+    <option value="6">Grade 6</option>
+    <option value="7">Grade 7</option>
+    <option value="8">Grade 8</option>
+
+            </select>
+
+
+             <button type="submit">Let's Play</button>
+        </form>
+    </section>
+
+    <script>
+           window.onbeforeunload = function() {
+               const userFile = '{{ user_file }}';  // Assuming this is set somewhere in your Flask template
+               const data = JSON.stringify({ userFile: userFile });
+               const url = '/cleanup';
+               navigator.sendBeacon(url, data);
+           }
+       </script>
+
+
+</body>
+</html>

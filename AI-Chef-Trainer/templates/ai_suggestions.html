@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+
+        <title>Ingredient and Dish Interaction</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style111.css') }}">
+        <script>
+            var userFile = "{{ user_file }}";  // This sets the JavaScript variable; collect user log data
+        </script>
+        <style>
+        .ingredients-container h4 {
+        margin-top: 0px; /* Reduces space above the h4 */
+        margin-bottom: 10px;
+    }
+
+        .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1000; /* On top */
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4); /* Semi-transparent background */
+    }
+
+    .modal-content {
+      background-color: #ffccff; /* Blue Purple background */
+      margin: 10% auto; /* 10% from the top and centered */
+      padding: 20px;
+      border: 4px solid #ff99cc; /* Light pink border */
+      width: 40%; /* Screen size */
+      border-radius: 20px; /* Rounded corners */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+    }
+
+    .close {
+      color: #ff0066; /* Bright pink color */
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #cc0055; /* Darker shade of pink */
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    /* Styles for the modal text */
+    .modal p {
+      color: #333; /* Dark text */
+      font-family: 'Comic Sans MS', 'Arial', sans-serif; /* Fun, readable font */
+      font-size: 20px;
+    }
+
+
+
+    .modal-heading {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 5px; /* Add space below the heading */
+        text-align: center; /* Center-align the heading */
+    }
+
+        .flex-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: flex-start;
+    gap: 20px;
+
+    padding: 0 10px;
+    }
+
+    .gif-container {
+        flex: 1;
+        padding: 10px;
+        text-align: right; /* Centers the GIF in the container */
+        width: auto;
+        height: auto; /* Adjusts height automatically */
+    }
+
+    .gif-container img {
+        max-width: 100%; /* Ensures the image does not overflow its container */
+        height: auto; /* Maintains the aspect ratio of the GIF */
+        width: 400px;
+        width: 400px; /* Adjusted width */
+    position: relative;
+    left: -30px; /* Shifts to the left */
+    margin-top: -150px;
+    }
+
+
+    html, body {
+      height: 100%; /* Ensure at least full height */
+      min-height: 100vh; /* Minimum height to cover the viewport height */
+      margin: 0; /* Reset default margin */
+      padding: 0; /* Reset default padding */
+    }
+    body{
+    background-image: url('{{ url_for('static', filename='images/3.jpg') }}');
+    background-repeat: no-repeat; /* Do not repeat the image */
+      background-attachment: fixed; /* Fix the background relative to the viewport */
+      background-size: cover; /* Cover the entire viewport */
+      -webkit-background-size: cover; /* For older WebKit browsers */
+      -moz-background-size: cover; /* For older Firefox browsers */
+      -o-background-size: cover; /* For older Opera browsers */
+    }
+
+    .ingredients-container {
+    flex: 3;
+    }
+
+
+                @media (max-width: 768px) {
+                    .flex-wrapper {
+                        flex-direction: column; /* Stack the items on smaller screens */
+                    }
+                    .ingredients-container, .ai-suggestions-container{
+                        max-width: 100%; /* Full width on smaller screens */
+                    }
+                    .gif-container img {
+        width: 50%; /* Larger or smaller based on your design needs */
+    }
+                }
+                /* Additional styles for other elements */
+                #main-title {
+                    text-align: center;
+                    color: Black;
+                    padding-top: 10px; /* Adjust as needed */
+                    z-index: 1;
+                    font-size: 30px;
+                }
+
+                .gif-container {
+                    display: none; /* Hide the GIF initially */
+                }
+
+        </style>
+
+
+</head>
+<body>
+
+
+
+
+
+  <section id="testing-section">
+    <h2 id="main-title">AI Chef Trainer: Test </h2>
+
+       <!-- AI prediction responses will be displayed here -->
+       <div class="flex-wrapper">
+         <div class="ingredients-container">
+    <form id="predict-form">
+          <input type="hidden" name="category" value="{{ type }}">
+          <h4>Select Ingredients</h4>
+          <div class="container">
+  <div class="row">
+      <div class="column">
+          <div class="ingredient">
+            <img src="{{ url_for('static', filename='images/cheese.jpg') }}" alt="Cheese">
+              <input type="checkbox" id="cheese" name="ingredients" value="Cheese">
+              <label for="cheese">Cheese</label>
+              </div>
+                <div class="ingredient">
+              <img src="{{ url_for('static', filename='images/tomato.jpg') }}"  alt="Tomato">
+              <input type="checkbox" id="tomato" name="ingredients" value="tomato">
+              <label for="tomato">Tomato</label>
+            </div>
+            <div class="ingredient">
+              <img src="{{ url_for('static', filename='images/potato.jpg') }}"  alt="Potato">
+              <input type="checkbox" id="potato" name="ingredients" value="potato">
+              <label for="potato">Potato</label>
+              </div>
+              <div class="ingredient">
+              <img src="{{ url_for('static', filename='images/spinach.jpg') }}"  alt="Spinach">
+              <input type="checkbox" id="spinach" name="ingredients" value="tomato">
+              <label for="spinach">Spinach</label>
+              </div>
+              <div class="ingredient">
+              <img src="{{ url_for('static', filename='images/oil.jpg') }}"  alt="Oil">
+              <input type="checkbox" id="oil" name="ingredients" value="oil">
+              <label for="oil">Oil</label>
+                </div>
+                <div class="ingredient">
+                    <img src="{{ url_for('static', filename='images/flour.jpg') }}"  alt="Flour">
+                    <input type="checkbox" id="flour" name="ingredients" value="flour">
+                    <label for="flour">Flour</label>
+
+          </div>
+</div>
+
+
+          <div class="column">
+          <div class="ingredient">
+              <img src="{{ url_for('static', filename='images/bellpepper.jpg') }}"  alt="Bell_peppers">
+              <input type="checkbox" id="bell_peppers" name="ingredients" value="bell_peppers">
+              <label for="bell_peppers">Bell Peppers</label>
+            </div>
+            <div class="ingredient">
+              <img src="{{ url_for('static', filename='images/onion.jpg') }}"  alt="Onion">
+              <input type="checkbox" id="onion" name="ingredients" value="onion">
+              <label for="onion">Onion</label>
+            </div>
+            <div class="ingredient">
+              <img src="{{ url_for('static', filename='images/carrot.jpg') }}"  alt="Carrot">
+              <input type="checkbox" id="carrot" name="ingredients" value="carrot">
+              <label for="carrot">Carrot</label>
+            </div>
+            <div class="ingredient">
+              <img src="{{ url_for('static', filename='images/salmon.jpg') }}"  alt="Salmon">
+              <input type="checkbox" id="salmon" name="ingredients" value="salmon">
+              <label for="salmon">Salmon</label>
+          </div>
+          <div class="ingredient">
+              <img src="{{ url_for('static', filename='images/chicken.jpg') }}"  alt="Chicken">
+              <input type="checkbox" id="chicken" name="ingredients" value="chicken">
+              <label for="chicken">Chicken</label>
+
+          </div>
+
+        <div class="ingredient">
+          <img src="{{ url_for('static', filename='images/mushrooms.jpg') }}"  alt="Mushrooms">
+          <input type="checkbox" id="mushrooms" name="ingredients" value="mushrooms">
+          <label for="mushrooms">Mushrooms</label>
+          </div>
+          </div>
+
+
+          <div class="column">
+          <div class="ingredient">
+              <img src="{{ url_for('static', filename='images/beef.jpg') }}"  alt="Beef">
+              <input type="checkbox" id="beef" name="ingredients" value="beef">
+              <label for="beef">Beef</label>
+          </div>
+
+          <div class="ingredient">
+              <img src="{{ url_for('static', filename='images/meat.jpg') }}"  alt="Meat">
+              <input type="checkbox" id="meat" name="ingredients" value="meat">
+              <label for="meat">Meat</label>
+          </div>
+
+          <div class="ingredient">
+              <img src="{{ url_for('static', filename='images/lemon.jpg') }}"  alt="Lemon">
+              <input type="checkbox" id="lemon" name="ingredients" value="lemon">
+              <label for="lemon">Lemon</label>
+          </div>
+
+          <div class="ingredient">
+              <img src="{{ url_for('static', filename='images/oliveoil.jpg') }}"  alt="Olive oil">
+              <input type="checkbox" id="olive oil" name="ingredients" value="olive oil">
+              <label for="olive oil">Olive Oil</label>
+          </div>
+          <div class="ingredient">
+              <img src="{{ url_for('static', filename='images/eggs.jpg') }}"  alt="Eggs">
+              <input type="checkbox" id="eggs" name="ingredients" value="eggs">
+              <label for="eggs">Eggs</label>
+          </div>
+          <div class="new-data">
+              <label for="new_ingredients">Add ingrediens:</label><br>
+              <input type="text" id="new_ingredients" name="new_ingredients" placeholder="e.g., tomatoes, basil" autocomplete="off"><br>
+            </div>
+
+</div>
+
+</div>
+
+      </form>
+
+      </div>
+       </div> <!-- Ingredients container ends -->
+
+
+
+       <div class="ai-suggestions-container"> <!-- AI suggestions container starts -->
+              <h4>AI suggestions</h4>
+              <div id="ai-responses">
+                  <div id="prediction-result"></div>
+              </div>
+          </div> <!-- AI suggestions container ends -->
+      </div> <!-- Flex wrapper ends -->
+
+
+
+
+
+      <div class="button-container">
+        <div class="button-row">
+          <span class="ai-description">Explore and see what AI suggests as a dish</span>
+          <button type="button" id="predict-button">AI suggestions</button>
+          <!--  <h4>Explore your model and see what dishes AI suggests: </h4>-->
+
+        </div>
+        <div class="model-buttons">
+
+<!--  <button onclick="clearAISuggestions()">Clear AI suggestions</button>-->
+        </div>
+    </div>
+
+    <!-- GIF Container -->
+    <div class="gif-container">
+        <img src="{{ url_for('static', filename='images/August15.gif') }}" alt="Description of GIF">
+
+    </div>
+
+    <div class="extra-buttons">
+  <span>Restart</span>
+        <button type="button" id="exit-button" onclick="location.href='/'"> </button>
+
+    </div>
+
+
+    <script>
+
+    let firstClick = true;
+
+    function clearAISuggestions() {
+const predictionResult = document.getElementById('prediction-result');
+if (predictionResult) {
+predictionResult.innerHTML = ''; // Clear the content
+}
+}
+function makePrediction() {
+    const checkedIngredients = Array.from(document.querySelectorAll('input[name="ingredients"]:checked'))
+                                    .map(ingredient => ingredient.value);
+    const additionalIngredientsInput = document.getElementById('new_ingredients').value;
+    const additionalIngredients = additionalIngredientsInput ? additionalIngredientsInput.split(',').map(ingredient => ingredient.trim()) : [];
+    const ingredients = [...checkedIngredients, ...additionalIngredients];
+
+    if (ingredients.length === 0) {
+        alert('Please enter your ingredients for prediction.');
+        return;
+    }
+
+    var userFile = "{{ user_file }}";
+
+    // Show the GIF container if it's the first click
+    if (firstClick) {
+        document.querySelector('.gif-container').style.display = 'block';
+        firstClick = false;  // Only show the GIF initially and let it remain visible thereafter
+    }
+
+    fetch('/make_prediction', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ingredients, userFile })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    })
+    .then(data => {
+        setTimeout(() => {
+            const resultElement = document.getElementById('prediction-result');
+
+            // Create a new section for each prediction instance
+            const predictionSection = document.createElement('div');
+
+            // Display selected ingredients label in bold
+            const ingredientsLabel = document.createElement('div');
+            ingredientsLabel.innerHTML = '<strong>Selected Ingredients:</strong> ' + ingredients.join(', '); // Combine label and ingredients in one line
+            //ingredientsLabel.innerHTML = `<strong>Selected Ingredients:</strong> ${ingredients.join(', ')}`;
+            predictionSection.appendChild(ingredientsLabel);
+
+            // Display predictions
+            const predictionsHeader = document.createElement('div'); // Use div to start on a new line
+predictionsHeader.innerHTML = '<strong>Recipes:</strong>'; // Using innerHTML to interpret the HTML tags
+predictionSection.appendChild(predictionsHeader);
+
+            const predictionsList = document.createElement('ul');
+            data.forEach(pred => {
+                const predictionText = `${pred.dish} with probability ${pred.probability.toFixed(2)}%`;
+                const listItem = document.createElement('li');
+                listItem.textContent = predictionText;
+                predictionsList.appendChild(listItem);
+            });
+            predictionSection.appendChild(predictionsList);
+
+            resultElement.appendChild(predictionSection); // Append the new section to the results
+
+        }, 9000);  // Delay in milliseconds to match the GIF duration
+
+        document.querySelectorAll('input[name="ingredients"]:checked').forEach(checkbox => checkbox.checked = false);
+        document.getElementById('new_ingredients').value = '';  // Clear the additional ingredients input
+    })
+    .catch(error => {
+        console.error('Error making prediction:', error);
+        alert('Error making prediction: ' + error.message);
+    });
+}
+
+
+   function resetUserSession() {
+var userFile = "{{ user_file }}";
+
+// First, trigger the download of the user's JSON file.
+window.open(`/download_user_file/${userFile}`);
+
+// After initiating the download, reset the session.
+fetch('/reset_session', {
+   method: 'GET'
+})
+.then(response => {
+   if (!response.ok) throw new Error(`Server responded with status ${response.status}`);
+   return response.json();
+})
+.then(data => {
+   console.log(data.message);
+   window.location.href = '/'; // Redirect to the home page after resetting the session.
+})
+.catch(error => {
+   console.error('Error:', error);
+   alert('Error resetting the session: ' + error.message);
+});
+}
+
+
+
+
+
+
+
+           // Attaching event listeners
+     document.addEventListener('DOMContentLoaded', function() {
+       document.getElementById('predict-button').addEventListener('click', makePrediction);
+      // document.getElementById('exit-button').addEventListener('click', resetUserSession);
+      document.getElementById('exit-button').addEventListener('click', resetUserSession);
+     });
+       </script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ingredient and Dish Interaction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style11.css') }}">
+    <style>
+
+    html, body {
+      height: 100%; /* Ensure at least full height */
+    /*  min-height: 100vh;  Minimum height to cover the viewport height */
+      margin: 0;
+      padding: 0;
+
+    }
+    body{
+      background-color: #8ca863;
+      background-image: url('{{ url_for('static', filename='images/back33333.jpg') }}');
+      background-repeat: no-repeat; /* Do not repeat the image */
+        background-attachment: fixed; /* Fix the background relative to the viewport */
+        background-size: cover; /* Cover the entire viewport */
+        -webkit-background-size: cover; /* For older WebKit browsers */
+        -moz-background-size: cover; /* For older Firefox browsers */
+        -o-background-size: cover; /* For older Opera browsers */
+      }
+
+.new-data input[type="text"], #guess-form {
+        width: auto;
+        padding: 5px;
+        margin-bottom: 5px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        flex-grow: 1;
+    }
+    .new-data label {
+        font-size: 20px;
+        display: inline-block;
+        white-space: nowrap;
+    }
+    .new-data button {
+        padding: 15px 30px;
+        font-size: 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .new-data button:hover {
+        background-color: #45a049;
+    }
+    .button-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    #prediction-section {
+        margin-top: 20px;
+    }
+
+
+
+    .prediction-result {
+    background-color: #f0f0f0; /* Light gray background */
+    color: #333; /* Dark text color for contrast */
+    font-size: 26px; /* Larger font size for prediction results */
+    padding: 20px; /* Padding inside the gray box */
+    margin-top: 20px; /* Space between button and this element */
+    /* Additional styling as needed */
+}
+.prediction-input-container {
+    margin-bottom: 20px; /* Adjust space between input container and button as needed */
+}
+#ingredients-input {
+    width: 100%; /* Adjust the width as needed */
+    padding: 1%; /* Responsive padding */
+    font-size: 1vw; /* Responsive font size */
+    margin-bottom: 20px; /* Adds space below the input box */
+    box-sizing: border-box; /* Ensures padding doesn't affect the overall width */
+}
+/* Additional styles for other elements */
+#main-title {
+  text-align: center;
+  color: Black;
+  padding-top: 10px; /* Adjust as needed */
+  z-index: 1;
+  font-size: 30px;
+  margin: 0;
+  padding: 0;
+
+}
+label[for="ingredients-input"] {
+    font-size: 26px; /* Adjust the font size as needed */
+    display: block; /* Ensures the label is on its own line */
+    margin-bottom: 8px; /* Adds some space below the label */
+}
+
+/* Increase font size for fieldset legends */
+fieldset legend {
+    font-size: 20px; /* Adjust this value as needed */
+    font-weight: bold;
+}
+
+/* Increase font size for labels associated with ingredients and dishes */
+.ingredient label, .dish label, .new-data label {
+    font-size: 18px; /* Adjust this value as needed */
+}
+
+/* Specific adjustments for checkboxes to improve visibility */
+input[type="checkbox"] + label {
+    font-size: 18px; /* Makes text next to checkboxes larger */
+}
+
+/* Ensures input[type="text"] styling doesn't affect #ingredients-input */
+input[type="text"]:not(#ingredients-input) {
+    font-size: 18px; /* Adjusts font size for text inputs, excluding #ingredients-input */
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* Center buttons horizontally */
+    align-items: center; /* Center buttons vertically, if needed */
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+    gap: 5px; /* Adjust the space between buttons */
+    width: 100%; /* Take full width to center align in the parent */
+}
+
+
+/* Button Appearance */
+button {
+    padding: 15px 30px;
+    font-size: 20px;
+    margin-top: 20px; /* Add some space above the button */
+    background-color: #4CAF50; /* Example color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #45a049; /* Darker shade of green */
+}
+
+.flex-wrapper {
+    display: flex;
+    flex-direction: row;  /* Align horizontally */
+    justify-content: space-around;  /* Distribute space between items */
+    align-items: flex-start;  /* Align items to the top of the container */
+    width: 100%;  /* Ensure it takes the full width available */
+    padding: 10px;
+}
+
+.container {
+    margin: 0;
+    padding: 0;
+}
+@media (max-width: 768px) {
+    .flex-wrapper {
+        flex-direction: column; /* Stack the items on smaller screens */
+    }
+    .ingredients-container, .ai-suggestions-container {
+        max-width: 100%; /* Full width on smaller screens */
+    }
+    #main-title {
+        margin-bottom: 5px;
+    }
+    .container {
+        margin-top: 5px;
+    }
+
+}
+
+@media (max-width: 768px) {
+    fieldset, .button-container, .model-buttons, .extra-buttons {
+        padding: 5px;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
+
+
+.progress-tracker {
+    counter-reset: section;
+    list-style-type: none;
+    display: flex;
+    padding: 0;
+    justify-content: center;
+    margin: 1em auto; /* Smaller margin */
+    gap: 10px; /* Reduced gap */
+    max-width: 80%;
+}
+
+.progress-tracker li {
+    position: relative;
+    padding: 7.5px 20px 7.5px 7.5px; /* Halved padding for asymmetrical shape */
+    background-color: #f9f9f9;
+    text-align: center;
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+    font-size: 8px;
+    color: #333;
+    border: 1px solid #cccccc; /* Thinner border */
+    border-radius: 10px; /* Smaller radius */
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1); /* Smaller shadow */
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.progress-tracker li::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -10px; /* Adjusted for smaller arrow */
+    transform: translateY(-50%) rotate(0deg);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 5px 0 5px 10px; /* Halved size for the arrow */
+    border-color: transparent transparent transparent #f9f9f9; /* Adjusted arrow border */
+    z-index: 1;
+}
+
+.progress-tracker li:last-child::after {
+    content: none; /* Remove arrow for last item */
+}
+
+.progress-tracker li.completed,
+.progress-tracker li.completed::after {
+    background-color: #4CAF50;
+    border-color: #369636;
+}
+
+.progress-tracker li:hover {
+    background-color: #e7e7e7;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12); /* Lighter shadow */
+}
+
+.progress-tracker li.completed:hover {
+    background-color: #58d158;
+}
+
+    .ingredients-container {
+        flex: 3; /* Increase space allocation */
+        background: rgba(255, 255, 255, 0.8);  /* Subtle background for emphasis */
+        padding: 0;
+        border: none;/*1px solid #000000; /* Add a black border */
+        box-shadow: none; /* Remove the shadow for a cleaner look */
+        margin:0
+    }
+    .extra-buttons {
+        display: flex;
+        flex-direction: row; /* Ensures buttons are in a row */
+        align-items: center;
+        justify-content: center;
+        padding-left: 60px;
+        margin-top: 0;
+        padding-top: 0;
+    }
+
+
+
+    .ingredients-container, .dishes-container {
+        margin: 10px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid #ccc;
+    }
+
+    .user-data-container {
+        flex: 1;  /* Less space for user data */
+        margin: 10px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid #ccc;
+        overflow-y: auto;  /* Allow scrolling */
+    }
+
+
+    </style>
+    <script>
+    var userFile = "{{ user_file }}";
+    console.log("User File:", userFile);
+    </script>
+</head>
+<body>
+    <section id="classification-game">
+<h2 id="main-title">AI Chef Trainer: Add your Training Data</h2>
+        <div class="flex-wrapper">
+
+                <div class="ingredients-container">
+        <form id="guess-form">
+            <fieldset>
+                <legend>Enter Ingredients</legend>
+                <div class="row">
+                    <div class="column">
+                        <div class="ingredient">
+                          <img src="{{ url_for('static', filename='images/cheese.jpg') }}" alt="Cheese">
+                            <input type="checkbox" id="cheese" name="ingredients" value="cheese">
+                            <label for="cheese">Cheese</label>
+                            </div>
+                              <div class="ingredient">
+                            <img src="{{ url_for('static', filename='images/tomato.jpg') }}"  alt="Tomato">
+                            <input type="checkbox" id="tomato" name="ingredients" value="tomato">
+                            <label for="tomato">Tomato</label>
+                          </div>
+                          <div class="ingredient">
+                        <img src="{{ url_for('static', filename='images/egplant.jpg') }}"  alt="Egplant">
+                        <input type="checkbox" id="egplant" name="ingredients" value="eggplant">
+                        <label for="egplant">Eggplant</label>
+                      </div>
+                      <div class="ingredient">
+                          <img src="{{ url_for('static', filename='images/meat.jpg') }}"  alt="Meat">
+                          <input type="checkbox" id="meat" name="ingredients" value="meat">
+                          <label for="meat">Meat</label>
+                      </div>
+
+
+                            </div>
+                            <div class="column">
+                            <div class="ingredient">
+                                <img src="{{ url_for('static', filename='images/bellpepper.jpg') }}"  alt="Bell_peppers">
+                                <input type="checkbox" id="bell_peppers" name="ingredients" value="bell_peppers">
+                                <label for="bell_peppers">Bell Peppers</label>
+                              </div>
+                              <div class="ingredient">
+                                <img src="{{ url_for('static', filename='images/onion.jpg') }}"  alt="Onion">
+                                <input type="checkbox" id="onion" name="ingredients" value="onion">
+                                <label for="onion">Onion</label>
+                              </div>
+                              <div class="ingredient">
+                                <img src="{{ url_for('static', filename='images/tortilla.jpg') }}"  alt="Tortilla">
+                                <input type="checkbox" id="tortilla" name="ingredients" value="tortilla">
+                                <label for="tortilla">Tortilla</label>
+                              </div>
+
+                              <div class="ingredient">
+                              <img src="{{ url_for('static', filename='images/potato.jpg') }}"  alt="Potato">
+                              <input type="checkbox" id="potato" name="ingredients" value="potato">
+                              <label for="potato">Potato</label>
+                              </div>
+
+                            </div>
+                            <div class="column">
+                            <div class="ingredient">
+                                <img src="{{ url_for('static', filename='images/beef.jpg') }}"  alt="Beef">
+                                <input type="checkbox" id="beef" name="ingredients" value="beef">
+                                <label for="beef">Beef</label>
+                            </div>
+                            <div class="ingredient">
+                              <img src="{{ url_for('static', filename='images/carrot.jpg') }}"  alt="Carrot">
+                              <input type="checkbox" id="carrot" name="ingredients" value="carrot">
+                              <label for="carrot">Carrot</label>
+                            </div>
+                            <div class="ingredient">
+                              <img src="{{ url_for('static', filename='images/milk.jpg') }}"  alt="Milk">
+                              <input type="checkbox" id="milk" name="ingredients" value="milk">
+                              <label for="milk">Milk</label>
+                            </div>
+
+                            <div class="ingredient">
+                                        <img src="{{ url_for('static', filename='images/rice.jpg') }}"  alt="Rice">
+                                        <input type="checkbox" id="rice" name="ingredients" value="rice">
+                                        <label for="rice">Rice</label>
+                                      </div>
+                          </div>
+                            <div class="column">
+                              <div class="ingredient">
+
+                                                <img src="{{ url_for('static', filename='images/oil.jpg') }}"  alt="Oil">
+                                                <input type="checkbox" id="oil" name="ingredients" value="oil">
+                                                <label for="oil">Oil</label>
+                                              </div>
+                            <div class="ingredient">
+                                <img src="{{ url_for('static', filename='images/lettuce.jpg') }}"  alt="lettuce">
+                                <input type="checkbox" id="lettuce" name="ingredients" value="lettuce">
+                                <label for="lettuce">Lettuce</label>
+                            </div>
+                            <div class="ingredient">
+                                <img src="{{ url_for('static', filename='images/beans.jpg') }}"  alt="Beans">
+                                <input type="checkbox" id="beans" name="ingredients" value="beans">
+                                <label for="beans">Beans</label>
+                            </div>
+                            <div class="new-data">
+                                <label for="new_ingredients">Add ingredients:</label>
+                                <input type="text" id="new_ingredients" name="new_ingredients" placeholder="e.g., tomato, basil"  autocomplete="off">
+                            </div>
+
+</div>
+
+                          </div>
+            </fieldset>
+            <fieldset>
+    <legend>Enter a Recipe</legend>
+    <div class="row"> <!-- Start a new row for dishes -->
+        <div class="column"> <!-- This column will contain the dishes -->
+            <div class="dish">
+                <img src="{{ url_for('static', filename='images/pasta.jpg') }}" alt="Pasta">
+                <input type="checkbox"  id="pasta" name="dish" value="Pasta">
+                <label for="pasta">Pasta</label>
+            </div>
+            <div class="dish">
+                <img src="{{ url_for('static', filename='images/pizza.jpg') }}" alt="Pizza">
+                <input type="checkbox"  id="pizza" name="dish" value="Pizza">
+                <label for="pizza">Pizza</label>
+            </div>
+
+        </div> <!-- Close the column for dishes -->
+
+        <div class="column"> <!-- This column will contain the dishes -->
+            <div class="dish">
+                <img src="{{ url_for('static', filename='images/ice.jpg') }}" alt="Ice-cream">
+                <input type="checkbox"  id="ice-cream" name="dish" value="Ice-cream">
+                <label for="ice-cream">Ice-cream</label>
+            </div>
+            <div class="dish">
+                <img src="{{ url_for('static', filename='images/cannoli.jpg') }}" alt="Cannoli">
+                <input type="checkbox"  id="cannoli" name="dish" value="Cannoli">
+                <label for="cannoli">Cannoli</label>
+            </div>
+        </div>
+        <div class="column"> <!-- This column will contain the dishes -->
+          <div class="dish">
+              <img src="{{ url_for('static', filename='images/macaron.jpg') }}" alt="Macaron">
+              <input type="checkbox"  id="macaron" name="dish" value="Macaron">
+              <label for="macaron">Macaron</label>
+          </div>
+          <div class="dish">
+              <img src="{{ url_for('static', filename='images/OIP.jpg') }}" alt="French-fries">
+              <input type="checkbox"  id="french-fries" name="dish" value="French-fries">
+              <label for="french-fries">French-fries</label>
+          </div>
+
+        </div>
+<div class="column">
+        <div class="dish">
+            <img src="{{ url_for('static', filename='images/soup.jpg') }}" alt="Soup">
+            <input type="checkbox"  id="soup" name="dish" value="Soup">
+            <label for="soup">Soup</label>
+        </div>
+        <div class="dish">
+            <img src="{{ url_for('static', filename='images/burrito.jpg') }}" alt="Burrito">
+            <input type="checkbox"  id="burrito" name="dish" value="Burrito">
+            <label for="burrito">burrito</label>
+        </div>
+
+    </div> <!-- Close the column for dishes -->
+    <div class="column"> <!-- This column will contain the dishes -->
+      <div class="new-data">
+          <label for="new_dish">Add a new dish:</label>
+          <input type="text" id="new_dish" name="new_dish" placeholder="e.g., Pasta" autocomplete="off">
+      </div>
+    </div>
+    </div> <!-- Close the row for dishes -->
+</fieldset>
+
+
+
+
+            <div class="form-actions">
+              <button type="button" id="add-to-mydata" onclick="addToTraining()">Add a Recipe</button>
+
+              </div>
+        </form>
+
+      </div>
+      <!-- User Recepies -->
+      <div class="user-data-container">
+      <h4>Your Recipes</h4>
+      <ul id="selected-items-list">
+
+      </ul>
+  </div>
+
+
+    </div>
+
+  <div class="extra-buttons">
+    <button type="button" id="train-model" class="train-button">
+            <span id="train-button-text">Train!</span>
+            <div id="progress-container" class="progress-container">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+        </button>
+      <button type="button" onclick="window.location.href='/ai_suggestions?user_file={{ user_file }}'" class="next-button">Next</button>
+  </div>
+
+
+
+    </section>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let trainingData = [];
+        //let isTrainingDataAvailable = false;
+        //document.getElementById('train-model').disabled = true; //disabled trained button
+
+
+        function addToTraining() {
+      // Collect checked ingredients from checkboxes
+      const ingredientCheckboxes = document.querySelectorAll('input[name="ingredients"]:checked');
+      const checkedIngredients = Array.from(ingredientCheckboxes).map(cb => cb.value);
+      // Get new ingredients from the text input, if any
+      const newIngredientsInput = document.getElementById('new_ingredients').value;
+      const newIngredients = newIngredientsInput ? newIngredientsInput.split(',').map(item => item.trim()) : [];
+      // Combine the checked ingredients and any new ingredients from the input
+      const allIngredients = checkedIngredients.concat(newIngredients).join(', ');
+
+
+
+      // Validation: Ensure at least three ingredients are selected or entered
+              if (allIngredients.length < 3) {
+                  alert('Please select or enter at least three ingredients for your recipe and one dish.');
+                  return; // Exit the function to prevent further execution
+              }
+
+      const dishCheckbox = document.querySelector('input[name="dish"]:checked');
+      const checkedDish = dishCheckbox ? dishCheckbox.value : '';
+      // Get new dish from the text input, prioritizing it over the checkbox selection
+      const newDishInput = document.getElementById('new_dish').value;
+      const newDish = newDishInput || checkedDish; // Use the new dish input if available, otherwise use the checked dish
+
+      // Validati (Fred Suggestion): Ensure that one dish is selected
+        if (!newDish) {
+            alert('Please select or enter one dish for your recipe.');
+            return; // Exit the function to prevent further execution
+        }
+
+      // Now include userFile when adding to training
+      const data = {
+          ingredients: allIngredients, // This includes both checked and entered ingredients
+          dish: newDish, // This can be from the checkbox or the new input
+          userFile: userFile
+      };
+      console.log('Data added to training:', data);
+      // Assuming you want to push this to a local array as well
+      trainingData.push(data);
+      // Send data to the server
+      fetch('/add_data', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.log('Success:', data);
+          alert('Your recipe is loaded - click the “Train!” button when done adding recipes!');
+          isTrainingDataAvailable = true; //add flag to make sure user really add data
+          document.getElementById('train-model').disabled = false;
+      })
+      .catch((error) => {
+          console.error('Error:', error);
+          alert('An error occurred while adding data');
+      });
+
+      // Now update the user-data-container
+         updateUserDataContainer(allIngredients, newDish);
+
+      // Clear the form, both checkboxes and input fields
+      document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+      document.getElementById('new_ingredients').value = '';
+      document.getElementById('new_dish').value = '';
+      updateTrainingButtonState();
+  }
+
+  function updateTrainingButtonState() {
+    const trainButton = document.getElementById('train-model');
+    trainButton.disabled = trainingData.length === 0;
+}
+  async function trainModel() {
+
+      const trainButton = document.getElementById('train-model');
+      const buttonText = document.getElementById('train-button-text');
+      const progressBar = document.getElementById('progress-bar');
+
+
+      // Check if training data has been added
+    if (trainingData.length === 0) {
+        alert("Please add your recipes first before training.");
+        return; // Exit the function to stop training
+    }
+
+      trainButton.disabled = true; // Disable the button to prevent multiple clicks
+      buttonText.textContent = 'Training...'; // Change text to indicate training
+      progressBar.style.width = '0%'; // Start with an empty progress bar
+
+      try {
+          const response = await fetch('/train', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({trainingData, userFile: userFile})
+          });
+          const data = await response.json();
+          if (data.error) {
+              throw new Error(data.error);
+          }
+          // Handle success
+          setTimeout(() => {
+              progressBar.style.width = '100%'; // Simulate the progress bar filling up
+              trainButton.style.backgroundColor = '#4CAF50'; // Change button color to green on success
+              buttonText.textContent = "Model trained successfully!";
+              progressBar.style.width = '0%'; // Reset progress bar
+              progressBar.style.backgroundColor = '';
+              trainButton.disabled = false; // Re-enable the button
+          }, 2000); // Delay to simulate training time
+      } catch (error) {
+          console.error('Error:', error);
+          alert('Error training the model: ' + error.message);
+          trainButton.style.backgroundColor = '#FF6666';
+          buttonText.textContent = "Error in training"; // Change the error message
+          trainButton.disabled = false; // Re-enable the button
+      }
+  }
+
+        function makePrediction() {
+                const ingredientsInput = document.getElementById('ingredients-input').value;
+                const ingredients = ingredientsInput.split(',').map(ingredient => ingredient.trim());
+                fetch('/make_prediction', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ingredients, userFile: userFile }) // Corrected to userFile for consistency
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => {
+                    const predictions = data.map(pred => `${pred.dish} with probability ${pred.probability.toFixed(2)}`);
+                    document.getElementById('prediction-result').textContent = 'Predicted Dishes: ' + predictions.join(', ');
+                })
+                .catch(error => {
+                    console.error('Error making prediction:', error);
+                    alert('Error making prediction: ' + error.message);
+                });
+            }
+            function resetUserSession() {
+    fetch('/reset_session', {
+        method: 'GET'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Server responded with status ${response.status}`);
+        }
+        return response.json();  // Only parse as JSON if the response was okay
+    })
+    .then(data => {
+        console.log(data.message);  // Log success message
+        window.location.href = '/';  // Redirect if successful operation
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error resetting the session: ' + error.message);
+    });
+}
+    // Attach event listeners
+    document.getElementById('add-to-mydata').addEventListener('click', addToTraining);
+    document.getElementById('train-model').addEventListener('click', trainModel);
+    document.getElementById('predict-button').addEventListener('click', makePrediction);
+    document.getElementById('exit-button').addEventListener('click', resetUserSession);
+});
+// print to the your recepies container
+function updateUserDataContainer(ingredients, dish) {
+    const list = document.getElementById('selected-items-list');
+    const entry = document.createElement('li'); // Create a new list item
+    entry.innerHTML = `<strong>Ingredients:</strong> ${ingredients}. <strong>Recipe:</strong> ${dish}`;
+    list.appendChild(entry); // Append the new entry to the list
+}
+
+window.onbeforeunload = function() {
+    const userFile = '{{ user_file }}';
+    const data = JSON.stringify({ userFile: userFile });
+    const url = '/cleanup';
+    navigator.sendBeacon(url, data);
+}
+
+</script>
+
+
+</body>
+</html>

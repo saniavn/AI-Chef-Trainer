@@ -1,0 +1,59 @@
+body {
+  display: flex;
+  background-color: #e0f7fa;
+  flex-direction: column; /* Stack content vertically */
+  align-items: center; /* Center-align items horizontally */
+}
+
+#student-info {
+  width: 40%; /* Adjust based on your layout */
+  margin-bottom: 20px; /* Add some space between sections */
+}
+
+.diagram {
+  width: 100%; /* Adjust based on your layout */
+  position: relative;
+
+    height: 600px; /* Adjust based on your needs */
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.Ingredients, .illnesses {
+    display: flex;
+    flex-direction: column;
+}
+
+.Ingredient, .illness {
+    margin: 5px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #ADD8E6; /* Light blue */
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.Ingredient-photo {
+    max-width: 50px; /* Maximum width */
+    max-height: 50px; /* Maximum height */
+    width: auto; /* Adjust width automatically */
+    height: auto; /* Adjust height automatically */
+    margin-right: 10px; /* Space between the photo and the text */
+    object-fit: cover; /* Adjust this as needed */
+}
+
+.Ingredient:hover, .illness:hover {
+    background-color: #87CEEB; /* Slightly darker blue */
+}
+
+.training {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #FF6347; /* Tomato color */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+}

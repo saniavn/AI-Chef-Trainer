@@ -1,0 +1,321 @@
+body {
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+  /*  background-color: #FFF9C4; Light yellow */
+    /* padding: 20px; Removed to allow full width */
+}
+
+
+/* Center Align Headers */
+h2, h4 {
+    text-align: center;
+    color: #444; /* Slightly lighter text for headings */
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+
+
+@media (max-width: 768px) {
+    .flex-wrapper {
+        flex-direction: column;
+        align-items: center; /* Stack vertically on small screens */
+    }
+
+    .ingredients-container, .ai-suggestions-container {
+        width: 100%; /* Full width for better readability */
+        margin-bottom: 0px;
+        margin-top: 0;
+    }
+    .new-data input[type="text"] {
+        padding: 8px;
+    }
+}
+@media (max-width: 480px) {
+    .new-data input[type="text"] {
+        padding: 6px; /* Even smaller padding for mobile screens */
+    }
+    .next-button::after {
+       font-size: 20px;
+   }
+}
+
+
+.button-container {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    align-items: flex-start; /* Align children to the start */
+    padding: 0;
+    margin-top: 0;
+    margin-top: 0;
+}
+
+.button-row h4 {
+    margin-bottom: 1px; /* Space between the heading and buttons */
+    padding-left: 20px; /* Aligns text with the buttons */
+}
+
+ .extra-buttons {
+    display: flex;
+    flex-direction: row; /* Ensures buttons are in a row */
+    padding-left: 50px; /* Aligns buttons with the heading */
+    gap: 35px;
+    margin-top: 0;
+}
+
+.extra-buttons button {
+    padding: 15px 20px; /* Reduced padding for smaller button size */
+    font-size: 18px;
+    margin-top: 0;
+   /*  background-color: #4CAF50; Example color */
+
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.extra-buttons button:hover {
+    background-color: #45a049; /* Darker shade on hover */
+}
+
+
+
+.ingredient img, .dish img {
+    width: 45px; /* Increased image size */
+    height: auto; /* Maintain aspect ratio */
+    margin-right: 5px; /* Space between image and text/checkbox */
+    margin-bottom: 0;
+}
+
+.ingredient, .dish {
+    display: flex;
+    align-items: center; /* Keep items aligned vertically */
+    gap: 10px; /* Adjust gap if more space is needed between items */
+    margin-bottom: 1px;
+}
+
+
+
+.Ingredients input[type="checkbox"], .Dishes input[type="radio"] {
+    margin-right: 20px; /* Space between checkbox and image */
+    font-size: 17px;
+    margin-bottom: 2px;
+}
+
+.Ingredients input[type="checkbox"], .Dishes input[type="radio"] {
+    margin-right: 10px; /* Space between checkbox and image */
+    font-size:1.5vw;
+}
+
+
+/* Container to align sections side by side */
+.container {
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap as needed */
+    justify-content: center; /* Centers items horizontally */
+    gap: 10px;
+    max-width: 95%;
+    margin: 0 auto; /* Keeps the container centered */
+    margin-top: 0px;
+    padding-left: 0;
+    padding-top: 0;
+}
+
+
+.row {
+    width: 100%; /* Makes sure the row takes full width of its container */
+    display: flex;
+    flex-wrap: wrap; /* Allows row items to wrap as needed */
+}
+
+.column {
+    flex: 1; /* Allows columns to grow and fill the space */
+    min-width: 300px; /* Increased minimum width for larger images */
+    padding: 5px; /* Padding around each item */
+
+}
+
+.ingredients-section, .dishes-section {
+    flex-basis: 45%; /* Adjusts this value to control the width of each section */
+    align-self: flex-start;
+    padding: 10px;
+    border: 1px solid #ddd; /* Adds border */
+    border-radius: 10px; /* Rounds the corners */
+    background-color: #f9f9f9; /* Light background */
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 30px 0; /* Space between rows */
+}
+
+.column, .dish {
+    flex: 1;
+    min-width: 200px;
+    padding: 5px;
+}
+
+.ingredient, .dish {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    gap: 10px; /* Space between checkbox and label */
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin-bottom: 1px;
+}
+
+/* Adjusting font size for labels next to checkboxes/radios */
+.ingredient label, .dish label {
+    font-size: 20px;
+     margin-bottom: 0;
+}
+
+
+/* Change background color of dropdown on hover */
+.custom-select:hover {
+    border-color: #aaa; /* Darker border on hover */
+}
+
+h2 {
+    font-size: 36px;
+}
+h4 {
+    font-size: 28px;
+}
+
+.new-data input[type="text"] {
+    width: 100%; /* Full width of its parent container */
+    border: 1px solid #ccc; /* Adds a subtle border around the input */
+    border-radius: 4px; /* Rounds the corners for a smoother look */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Adds a light shadow for depth */
+    margin-bottom: 10px; /* Maintains space below the input field */
+    padding: 10px; /* Increased fixed padding for more space inside the box */
+    font-size: 18px;
+}
+
+.ai-suggestions-container h4, .ai-suggestions-container #ai-responses {
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+}
+
+
+.ingredients-container {
+    background-color: rgba(255, 255, 255, 0.8); /* This will make the container semi-transparent */
+    padding-top: 0; /* Reduced padding at the top */
+    padding-bottom: 0; /* Reduced padding at the bottom */
+    margin: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+
+}
+.new-data label {
+    font-size: 20px;
+    display: block; /* Ensures the label is on its own line if not already */
+
+}
+
+.ingredient:hover, .dish:hover {
+    margin-top: 0;
+    margin-bottom: 0; /* Keep consistency on hover */
+}
+fieldset {
+    position: relative;
+    padding: 5px;  /* Padding around the content inside the fieldset */
+    border: 1px solid #ccc;  /* A clear boundary */
+    margin:0;
+    box-sizing: border-box;
+}
+
+fieldset * {
+    margin-bottom: 0;  /* Uniform bottom margin for all child elements */
+}
+
+legend {
+    width: 100%; /* Extends the legend across the fieldset */
+    text-align: center; /* Centers the text within the legend */
+    padding: 0;
+}
+
+* {
+    box-sizing: border-box; /* Border-box model universally */
+}
+.form-actions {
+    display: flex; /* Enables flexbox */
+    justify-content: center; /* Centers children horizontally in the container */
+    align-items: center; /* Centers children vertically */
+    padding: 10px; /* Padding around the content */
+}
+.form-actions button {
+    margin: 0 10px; /* Adds 10px margin on the left and right of each button */
+}
+#test-ai-button-2 {
+    margin-right: 20px; /* Adds 20px margin to the right of the 'Add to My Data' button */
+}
+
+
+.extra-buttons {
+    margin-top: -10px; /* Pulls the button up closer to the preceding element */
+}
+.extra-buttons {
+    padding: 0;
+    margin-top: 5px;  /* Keep elements compact */
+}
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers items which might help in reducing perceived space */
+    margin-top: 0; /* No extra space above the container */
+}
+#new_dish {
+    width: 20%;
+}
+.next-button::after {
+    content: '→'; /* Adds an arrow */
+    margin-left: 5px;
+    font-size: 22px;
+}
+.next-button {
+    padding: 7px 10px;
+    font-size: 22px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover for clarifty*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.next-button:hover {
+    background-color: #45a049; /* Darker shade on hover */
+}
+.progress-bar {
+    height: 20px; 
+    background-color: #FFFF99; /* Light yellow color */
+    width: 0%; /* Start with no fill */
+    transition: width 2s ease-in-out, background-color 0.5s ease-in-out;  /* Smooth transitions for width and background color */
+}
+.train-button {
+    padding: 10px 15px;
+    font-size: 24px;
+    background-color: #FFA500;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+}
+
+.train-button:hover {
+    background-color: #FF8C00;
+}
