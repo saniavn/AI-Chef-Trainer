@@ -12,5 +12,5 @@ cd AI-Chef-Trainer
 pip install Flask pandas scikit-learn joblib numpy
 
 ## Running the application
-To run: python app.py
+python app.py
 
