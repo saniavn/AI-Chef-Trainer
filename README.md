@@ -25,4 +25,7 @@ python app.py
 
 - **Dishes and Ingredients**: Images of dishes and ingredients are sourced from Google search.
 
+## Acknowledgments
+This project was developed and piloted by Saniya Vahedian Movahed. 
+
 
