@@ -5,6 +5,9 @@ https://aichef.pythonanywhere.com/
 
 <p align="justify"> </p>
 
+## Curriculum
+[che-AIslides11.](https://utsacloud-my.sharepoint.com/:p:/g/personal/saniya_vahedianmovahed_utsa_edu/EcDRnXMLevhMq-U0Du3bUHYBuNrVsZVhBuZ_K7E1n1_yMQ?e=wZeDtJ)
+<p align="justify"> </p>
 ## Features 
 
 ## Setup
